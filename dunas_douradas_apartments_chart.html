@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dunas Douradas — Time on Market — Apartments</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;font-family:'Montserrat',sans-serif;padding:0}
+.irg-chart-card{background:#fff;border-left:3px solid #C9A96E;padding:32px 32px 24px;max-width:820px;margin:0 auto}
+.irg-chart-eyebrow{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#C9A96E;margin-bottom:8px}
+.irg-chart-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:#2A2A2A;line-height:1.2;margin-bottom:6px}
+.irg-chart-subtitle{font-size:11px;font-weight:300;color:#2A2A2A;opacity:.55;letter-spacing:.04em}
+.irg-gold-rule{height:1px;background:#C9A96E;opacity:.25;margin:20px 0;border:none}
+.irg-chart-wrap{position:relative;width:100%;height:320px}
+.irg-chart-footer{display:flex;align-items:center;justify-content:space-between;margin-top:18px;flex-wrap:wrap;gap:12px}
+.irg-legend{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.irg-legend-item{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:500;letter-spacing:.08em;color:#2A2A2A}
+.irg-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.irg-legend-dash{width:18px;height:0;border-top:2px dashed rgba(201,169,110,0.55);flex-shrink:0}
+.irg-chart-source{font-size:9px;font-weight:300;color:#2A2A2A;opacity:.38;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<div class="irg-chart-card">
+  <div class="irg-chart-eyebrow">Dunas Douradas — 2025 Market Data</div>
+  <div class="irg-chart-title">How long apartments sit on the market</div>
+  <div class="irg-chart-subtitle">Average months before sale or delisting &nbsp;·&nbsp; apartments by price segment &nbsp;·&nbsp; 18 active listings</div>
+  <hr class="irg-gold-rule">
+  <div class="irg-chart-wrap">
+    <canvas id="dunasApartmentsChart"></canvas>
+  </div>
+  <div class="irg-chart-footer">
+    <div class="irg-legend">
+      <div class="irg-legend-item">
+        <div class="irg-legend-dot" style="background:rgba(201,169,110,0.85)"></div>
+        Apartments
+      </div>
+      <div class="irg-legend-item">
+        <div class="irg-legend-dash"></div>
+        12 months
+      </div>
+    </div>
+    <div class="irg-chart-source">Source: 2025 full-year listings data &nbsp;·&nbsp; Sold and delisted</div>
+  </div>
+</div>
+
+<script>
+const ctx = document.getElementById('dunasApartmentsChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['€700K-800K','€800K-900K','€900K-1M','€1M-1.5M','€1.5M-2M','€2M-2.5M'],
+    datasets: [
+      {
+        label: 'Apartments',
+        data: [6.9, 12.3, 12.7, 20.9, 10.3, 6.2],
+        backgroundColor: 'rgba(201,169,110,0.85)',
+        borderRadius: 2,
+        maxBarThickness: 40
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 24,
+        title: { display: true, text: 'Months', font: { family: 'Montserrat', size: 10 } },
+        grid: { color: 'rgba(42,42,42,0.06)' },
+        ticks: { font: { family: 'Montserrat', size: 10 } }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'Montserrat', size: 10 }, maxRotation: 45, minRotation: 45 }
+      }
+    }
+  }
+});
+
+Chart.register({
+  id: 'refLine12',
+  afterDraw(chart) {
+    const yScale = chart.scales.y;
+    const xScale = chart.scales.x;
+    const y = yScale.getPixelForValue(12);
+    const ctx = chart.ctx;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(201,169,110,0.55)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(xScale.left, y);
+    ctx.lineTo(xScale.right, y);
+    ctx.stroke();
+    ctx.restore();
+  }
+});
+</script>
+</body>
+</html>
